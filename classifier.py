@@ -42,21 +42,21 @@ def frontal_images():
     images_anfas = list()
     for i in range(0, 20):
         images_anfas.append(cv2.imread("frontal/frontal_" + str(i) + '.jpg'))
-    face_cascade = cv2.CascadeClassifier('classifiers/haarcascade_smile.xml')
-    # eye_cascade = cv2.CascadeClassifier('classifiers/haarcascade_eye.xml')
+    face_cascade = cv2.CascadeClassifier('classifiers/lbpcascade_frontalface_improved.xml')
+    eye_cascade = cv2.CascadeClassifier('classifiers/haarcascade_eye.xml')
 
     for j in range(0, 20):
         gray = cv2.cvtColor(images_anfas[j], cv2.COLOR_BGR2GRAY)
 
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        faces = face_cascade.detectMultiScale(gray, 5, 1)
         for (x, y, w, h) in faces:
             img = images_anfas[j]
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            # roi_gray = gray[y:y + h, x:x + w]
-            # roi_color = img[y:y + h, x:x + w]
-            # eyes = eye_cascade.detectMultiScale(roi_gray)
-            # for (ex, ey, ew, eh) in eyes:
-            #     cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+            roi_gray = gray[y:y + h, x:x + w]
+            roi_color = img[y:y + h, x:x + w]
+            eyes = eye_cascade.detectMultiScale(roi_gray)
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
 
         cv2.imshow('img', images_anfas[j])
         cv2.waitKey(0)
